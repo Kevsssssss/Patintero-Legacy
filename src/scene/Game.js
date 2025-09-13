@@ -44,6 +44,12 @@ class Game extends Phaser.Scene {
         // Arrow Keyboard Controllers
         this.arrowKeys = this.input.keyboard.createCursorKeys()
         // Numpad Keyboard Controllers (configuring)
+        this.numKeys = this.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.NUMPAD_ADD,
+            down: Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE,
+            left: Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR,
+            right: Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX
+        })
 
     }
     update() {
