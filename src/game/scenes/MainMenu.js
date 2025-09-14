@@ -22,8 +22,8 @@ export class MainMenu extends Scene
             align: 'center'
         }).setOrigin(0.5)
 
-        // Clickable Main Menu Text
-        this.mainMenuText = this.add.text(512, 600, 'Main Menu', {
+        // Clickable Play Text
+        this.mainMenuText = this.add.text(512, 600, 'Play', {
             fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center',
