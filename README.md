@@ -9,5 +9,5 @@
 
 2. To run the code:
     ```
-    npm run start
+    npm run dev
     ```
