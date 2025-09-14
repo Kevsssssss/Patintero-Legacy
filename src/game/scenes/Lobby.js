@@ -40,6 +40,7 @@ export class Lobby extends Scene
             this.game.canvas.style.cursor = 'default';
             this.twoPlayers.setScale(1);
         });
+        
         this.fourPlayers = this.add.text(512, 500, '4 Players', {
             fontFamily: '"Press Start 2P"', fontSize: 40, color: '#ffffff',
             stroke: '#000000', strokeThickness: 9,
@@ -61,7 +62,7 @@ export class Lobby extends Scene
         });
 
         this.twoPlayers.on('pointerdown', () => {
-            this.scene.start('Game');
+            this.scene.start('TestPlayGrounds');
         });
         this.fourPlayers.on('pointerdown', () => {
             this.scene.start('Game');

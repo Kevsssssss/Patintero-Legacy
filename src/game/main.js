@@ -4,6 +4,7 @@ import { GameOver } from './scenes/GameOver';
 import { Lobby } from './scenes/Lobby';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
+import { TestPlayGrounds } from './scenes/TestPlayGrounds';
 import { AUTO, Game } from 'phaser';
 
 // Find out more information about the Game Config at:
@@ -19,13 +20,21 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }
+        },
+        debug: true
+    },
     scene: [
         Boot,
         Preloader,
         MainMenu,
         Lobby,
         MainGame,
-        GameOver
+        GameOver,
+        TestPlayGrounds
     ]
 };
 
