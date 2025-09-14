@@ -11,10 +11,10 @@ export class GameOver extends Scene
     {
         this.cameras.main.setBackgroundColor(0xff0000);
 
-        this.add.image(512, 384, 'background').setAlpha(0.5);
+        this.add.image(512, 384, 'background').setAlpha(0.5).setScale(1.5);
 
         this.add.text(512, 384, 'Game Over', {
-            fontFamily: '"Press Start 2P"', fontSize: 64, color: '#ffffff',
+            fontFamily: '"Press Start 2P"', fontSize: 64, color: '#ff0000',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
