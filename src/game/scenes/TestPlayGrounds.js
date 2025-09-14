@@ -7,39 +7,11 @@ export class TestPlayGrounds extends Scene
         super('TestPlayGrounds');
     }
 
-    create()
+    preload()
     {
-        // Back Button
-        this.back = this.add.text(100, 50, 'Back', {
-            fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 9,
-            align: 'center' 
-        }).setOrigin(0.5).setInteractive();
-        this.back.on('pointerover', () => {
-            this.game.canvas.style.cursor = 'pointer';
-            this.back.setScale(1.1);
-        });
-        this.back.on('pointerout', () => {
-            this.game.canvas.style.cursor = 'default';
-            this.back.setScale(1);
-        });
-
-
-        this.cameras.main.setBackgroundColor(0x814a1e);
-
-        this.add.text(512, 350, 'Wala pa dawg lakaw-lakaw sa ara', {
-            fontFamily: '"Press Start 2P"', fontSize: 20, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 5,
-            align: 'center'
-        }).setOrigin(0.5);
-
-        this.player = this.physics.add.sprite((1024 / 2), (768 / 2), 'player').setCollideWorldBounds(true).setScale(1.5); // player
-        
         // player animation
-
         this.anims.create({
             key: 'turn',
-            // Change the key from 'dude' to 'player'
             frames: [ { key: 'player', frame: 0 } ],
             frameRate: 20
         });
@@ -71,7 +43,36 @@ export class TestPlayGrounds extends Scene
             frameRate: 8,
             repeat: -1
         });
+    }
 
+    create()
+    {
+        // Back Button
+        this.back = this.add.text(100, 50, 'Back', {
+            fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 9,
+            align: 'center' 
+        }).setOrigin(0.5).setInteractive();
+        this.back.on('pointerover', () => {
+            this.game.canvas.style.cursor = 'pointer';
+            this.back.setScale(1.1);
+        });
+        this.back.on('pointerout', () => {
+            this.game.canvas.style.cursor = 'default';
+            this.back.setScale(1);
+        });
+
+
+        this.cameras.main.setBackgroundColor(0x874e3b);
+
+        this.add.text(512, 350, 'Wala pa dawg lakaw-lakaw sa ara', {
+            fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 5,
+            align: 'center'
+        }).setOrigin(0.5);
+
+        this.player = this.physics.add.sprite((1024 / 2), (768 / 2), 'player').setCollideWorldBounds(true).setScale(1.5); // player
+        
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
@@ -88,7 +89,7 @@ export class TestPlayGrounds extends Scene
 
 
         
-        const speed = 3
+        var speed = 5
         if (this.wasd.up.isDown) {
             this.player.y -= speed;
             this.player.anims.play('up', true);
@@ -100,12 +101,13 @@ export class TestPlayGrounds extends Scene
         else if (this.wasd.left.isDown) {
             this.player.x -= speed;
             this.player.anims.play('left', true);
-        } else if (this.wasd.right.isDown) {
+        }
+        else if (this.wasd.right.isDown) {
             this.player.x += speed;
             this.player.anims.play('right', true);
-        } else {
+        }
+        else {
             this.player.anims.play('turn', true);
         }
-        
     }
 }
