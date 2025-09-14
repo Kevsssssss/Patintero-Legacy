@@ -9,39 +9,67 @@ export class TestPlayGrounds extends Scene
 
     preload()
     {
-        // player animation
-        this.anims.create({
-            key: 'turn',
-            frames: [ { key: 'player', frame: 0 } ],
-            frameRate: 20
-        });
+        // // player animation
+        // this.anims.create({
+        //     key: 'turn',
+        //     frames: [ { key: 'player', frame: 0 } ],
+        //     frameRate: 20
+        // });
 
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNames('player', { start: 4, end: 7 }),
-            frameRate: 8,
-            repeat: -1
-        });
+        // this.anims.create({
+        //     key: 'right',
+        //     frames: this.anims.generateFrameNames('player', { start: 4, end: 7 }),
+        //     frameRate: 8,
+        //     repeat: -1
+        // });
 
-        this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNames('player', { start: 8, end: 11 }),
-            frameRate: 8,
-            repeat: -1
-        });
+        // this.anims.create({
+        //     key: 'left',
+        //     frames: this.anims.generateFrameNames('player', { start: 8, end: 11 }),
+        //     frameRate: 8,
+        //     repeat: -1
+        // });
 
-        this.anims.create({
-            key: 'up',
-            frames: this.anims.generateFrameNames('player', { start: 12, end: 15 }),
-            frameRate: 8,
-            repeat: -1
-        });
+        // this.anims.create({
+        //     key: 'up',
+        //     frames: this.anims.generateFrameNames('player', { start: 12, end: 15 }),
+        //     frameRate: 8,
+        //     repeat: -1
+        // });
 
-        this.anims.create({
-            key: 'down',
-            frames: this.anims.generateFrameNames('player', { start: 16, end: 19 }),
-            frameRate: 8,
-            repeat: -1
+        // this.anims.create({
+        //     key: 'down',
+        //     frames: this.anims.generateFrameNames('player', { start: 16, end: 19 }),
+        //     frameRate: 8,
+        //     repeat: -1
+        // });
+
+        const anims = [
+            { key: 'turn', start: 0, end: 0, frameRate: 20, repeat: 0 },
+            { key: 'right', start: 4, end: 7, frameRate: 8, repeat: -1 },
+            { key: 'left', start: 8, end: 11, frameRate: 8, repeat: -1 },
+            { key: 'up', start: 12, end: 15, frameRate: 8, repeat: -1 },
+            { key: 'down', start: 16, end: 19, frameRate: 8, repeat: -1 }
+        ];
+
+        anims.forEach(anim => {
+            // For the 'turn' animation, use a single frame.
+            if (anim.key === 'turn') {
+                this.anims.create({
+                    key: anim.key,
+                    frames: [{ key: 'player', frame: anim.start }],
+                    frameRate: anim.frameRate,
+                    repeat: anim.repeat
+                });
+            } else {
+                // For all other animations, generate the frame range.
+                this.anims.create({
+                    key: anim.key,
+                    frames: this.anims.generateFrameNumbers('player', { start: anim.start, end: anim.end }),
+                    frameRate: anim.frameRate,
+                    repeat: anim.repeat
+                });
+            }
         });
     }
 
@@ -86,27 +114,35 @@ export class TestPlayGrounds extends Scene
         this.back.on('pointerdown', () => {
             this.scene.start('MainMenu');
         });
+        // Player Movement
+        var speed = 5;
+        let moveX = 0;
+        let moveY = 0;
 
+        if (this.wasd.up.isDown) moveY -= 1;
+        if (this.wasd.down.isDown) moveY += 1;
+        if (this.wasd.left.isDown) moveX -= 1;
+        if (this.wasd.right.isDown) moveX += 1;
 
-        
-        var speed = 5
-        if (this.wasd.up.isDown) {
-            this.player.y -= speed;
-            this.player.anims.play('up', true);
-        }
-        else if (this.wasd.down.isDown) {
-            this.player.y += speed;
-            this.player.anims.play('down', true);
-        }
-        else if (this.wasd.left.isDown) {
-            this.player.x -= speed;
-            this.player.anims.play('left', true);
-        }
-        else if (this.wasd.right.isDown) {
-            this.player.x += speed;
-            this.player.anims.play('right', true);
-        }
-        else {
+        // Normalize movement vector for consistent speed
+        if (moveX !== 0 || moveY !== 0) {
+            const length = Math.sqrt(moveX * moveX + moveY * moveY);
+            moveX = (moveX / length) * speed;
+            moveY = (moveY / length) * speed;
+            this.player.x += moveX;
+            this.player.y += moveY;
+
+            // Choose animation based on direction
+            if (moveY < 0 && moveX === 0) {
+                this.player.anims.play('up', true);
+            } else if (moveY > 0 && moveX === 0) {
+                this.player.anims.play('down', true);
+            } else if (moveX < 0) {
+                this.player.anims.play('left', true);
+            } else if (moveX > 0) {
+                this.player.anims.play('right', true);
+            }
+        } else {
             this.player.anims.play('turn', true);
         }
     }
