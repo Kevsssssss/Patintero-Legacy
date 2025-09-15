@@ -35,12 +35,43 @@ export class Preloader extends Scene
         this.load.image('logo', 'logo.png',);
         
         this.load.spritesheet('player', 'black-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
+
+        // Audio
+        this.load.audio('walkSfx', 'audio/walking_sfx.wav');
     }
 
     create ()
     {
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
+
+        const anims = [
+            { key: 'turn', start: 0, end: 0, frameRate: 20, repeat: 0 },
+            { key: 'right', start: 4, end: 7, frameRate: 8, repeat: -1 },
+            { key: 'left', start: 8, end: 11, frameRate: 8, repeat: -1 },
+            { key: 'up', start: 12, end: 15, frameRate: 8, repeat: -1 },
+            { key: 'down', start: 16, end: 19, frameRate: 8, repeat: -1 }
+        ];
+
+        anims.forEach(anim => {
+            // For the 'turn' animation, use a single frame.
+            if (anim.key === 'turn') {
+                this.anims.create({
+                    key: anim.key,
+                    frames: [{ key: 'player', frame: anim.start }],
+                    frameRate: anim.frameRate,
+                    repeat: anim.repeat
+                });
+            } else {
+                // For all other animations, generate the frame range.
+                this.anims.create({
+                    key: anim.key,
+                    frames: this.anims.generateFrameNumbers('player', { start: anim.start, end: anim.end }),
+                    frameRate: anim.frameRate,
+                    repeat: anim.repeat
+                });
+            }
+        });
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start('MainMenu'); 
