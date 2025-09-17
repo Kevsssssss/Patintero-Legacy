@@ -7,44 +7,6 @@ export class TestPlayGrounds extends Scene
         super('TestPlayGrounds');
     }
 
-    preload()
-    {
-        // // player animation
-        // this.anims.create({
-        //     key: 'turn',
-        //     frames: [ { key: 'player', frame: 0 } ],
-        //     frameRate: 20
-        // });
-
-        // this.anims.create({
-        //     key: 'right',
-        //     frames: this.anims.generateFrameNames('player', { start: 4, end: 7 }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // });
-
-        // this.anims.create({
-        //     key: 'left',
-        //     frames: this.anims.generateFrameNames('player', { start: 8, end: 11 }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // });
-
-        // this.anims.create({
-        //     key: 'up',
-        //     frames: this.anims.generateFrameNames('player', { start: 12, end: 15 }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // });
-
-        // this.anims.create({
-        //     key: 'down',
-        //     frames: this.anims.generateFrameNames('player', { start: 16, end: 19 }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // });
-    }
-
     create()
     {
         // Back Button
@@ -65,7 +27,7 @@ export class TestPlayGrounds extends Scene
 
         this.cameras.main.setBackgroundColor(0x874e3b);
 
-        this.add.text(512, 350, 'Wala pa dawg lakaw-lakaw sa ara', {
+        this.add.text(512, 350, 'Theres nothing here yet.', {
             fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 5,
             align: 'center'

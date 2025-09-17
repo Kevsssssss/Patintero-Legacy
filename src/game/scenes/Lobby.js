@@ -65,7 +65,7 @@ export class Lobby extends Scene
             this.scene.start('TestPlayGrounds');
         });
         this.fourPlayers.on('pointerdown', () => {
-            this.scene.start('Game');
+            this.scene.start('TestPlayGrounds');
         });
     }
 }   

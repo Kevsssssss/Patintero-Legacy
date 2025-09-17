@@ -1,5 +1,7 @@
 import { Scene } from 'phaser';
 
+import "@fontsource/press-start-2p"
+
 export class Preloader extends Scene
 {
     constructor ()
