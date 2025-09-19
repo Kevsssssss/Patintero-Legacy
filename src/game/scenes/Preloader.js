@@ -36,6 +36,7 @@ export class Preloader extends Scene
 
         this.load.image('logo', 'logo.png',);
         
+        // Sprite sheets
         this.load.spritesheet('player', 'black-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
 
         // Audio
