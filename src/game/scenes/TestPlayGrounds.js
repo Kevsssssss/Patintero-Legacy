@@ -49,7 +49,7 @@ export class TestPlayGrounds extends Scene
             this.scene.start('MainMenu');
         });
         // Player Movement
-        var speed = 10;
+        var speed = 5;
         let moveX = 0;
         let moveY = 0;
 
