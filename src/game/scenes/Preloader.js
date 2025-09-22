@@ -76,7 +76,26 @@ export class Preloader extends Scene
             }
         });
 
+        // "Click to Continue Text" text
+        const continueText = this.add.text(512, 600, 'Click to Continue', {
+            fontFamily: '"Press Start 2p"', fontSize: 30, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 5,
+            align: 'center'
+        }).setOrigin(0.5);
+        this.tweens.add({ // Blinking Effect
+            targets: continueText,
+            alpha: 0.2,
+            duration: 1000,
+            yoyo: true,
+            repeat: -1
+        });
+
+        // Click redirects to MainMenu
+        this.input.once('pointerdown', () => {
+            this.scene.start('MainMenu')
+        });
+        
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MainMenu'); 
+        // this.scene.start('MainMenu'); 
     }
 }

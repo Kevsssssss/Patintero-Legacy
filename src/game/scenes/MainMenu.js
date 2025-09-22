@@ -75,7 +75,7 @@ export class MainMenu extends Scene
     update ()
     {
         this.mainMenuText.once('pointerdown', () => {
-            this.scene.start('Lobby');
+            this.scene.start('PlayGrounds');
         });
         this.controlText.once('pointerdown', () => {
             // Change scene to controllers

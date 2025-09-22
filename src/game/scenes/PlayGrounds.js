@@ -1,10 +1,10 @@
 import { Scene } from "phaser";
 
-export class TestPlayGrounds extends Scene
+export class PlayGrounds extends Scene
 {
     constructor()
     {
-        super('TestPlayGrounds');
+        super('PlayGrounds');
     }
 
     create()
