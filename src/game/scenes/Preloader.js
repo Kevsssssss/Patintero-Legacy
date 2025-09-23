@@ -100,7 +100,7 @@ export class Preloader extends Scene
 
         // Click redirects to MainMenu
         this.input.once('pointerdown', () => {
-            this.scene.start('MainMenu')
+            this.scene.start('PlayGrounds')
         });
         
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
