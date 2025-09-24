@@ -39,6 +39,7 @@ export class Preloader extends Scene
         // Sprite sheets
         this.load.spritesheet('player1', 'black-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
         this.load.spritesheet('player2', 'blue-man-sprite.png', { frameWidth: 70, frameHeight: 100});
+        this.load.spritesheet('bot', 'red-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
 
         // Audio
         this.load.audio('walkSfx', 'audio/walking_sfx.wav');
@@ -52,10 +53,10 @@ export class Preloader extends Scene
         const createPlayerAnims = (playerKey) => {
             const anims = [
                 { key: 'turn', start: 0, end: 0, frameRate: 20, repeat: 0 },
-                { key: 'right', start: 4, end: 7, frameRate: 8, repeat: -1 },
-                { key: 'left', start: 8, end: 11, frameRate: 8, repeat: -1 },
-                { key: 'up', start: 12, end: 15, frameRate: 8, repeat: -1 },
-                { key: 'down', start: 16, end: 19, frameRate: 8, repeat: -1 }
+                { key: 'right', start: 4, end: 7, frameRate: 10, repeat: -1 },
+                { key: 'left', start: 8, end: 11, frameRate: 10, repeat: -1 },
+                { key: 'up', start: 12, end: 15, frameRate: 10, repeat: -1 },
+                { key: 'down', start: 16, end: 19, frameRate: 10, repeat: -1 }
             ];
 
             anims.forEach(anim => {
@@ -82,6 +83,7 @@ export class Preloader extends Scene
 
         createPlayerAnims('player1');
         createPlayerAnims('player2');
+        createPlayerAnims('bot');
         
 
         // "Click to Continue Text" text
