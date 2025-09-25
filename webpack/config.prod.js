@@ -14,7 +14,7 @@ module.exports = {
     entry: "./src/main.js",
     output: {
         filename: "./bundle.min.js",
-        path: path.resolve(__dirname, '../<YOUR_FOLDER_NAME>'), // <-- Check this line!
+        path: path.resolve(__dirname, '../Patintero-Legacy'), // <-- Check this line!
     },
     devtool: false,
     performance: {
