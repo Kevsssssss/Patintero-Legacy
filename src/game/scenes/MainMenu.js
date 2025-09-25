@@ -40,36 +40,20 @@ export class MainMenu extends Scene
         });
 
         // Clickable Play Text
-        this.mainMenuText = this.add.text(512, 500, 'Play', {
+        this.playText = this.add.text(512, 500, 'Play', {
             fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center',
             cursor: 'pointer'
         }).setOrigin(0.5).setInteractive();
         // Adding hover effect
-        this.mainMenuText.on('pointerover', () => {
+        this.playText.on('pointerover', () => {
             this.game.canvas.style.cursor = 'pointer';
-            this.mainMenuText.setScale(1.1)
+            this.playText.setScale(1.1)
         });
-        this.mainMenuText.on('pointerout', () => {
+        this.playText.on('pointerout', () => {
             this.game.canvas.style.cursor = 'default';
-            this.mainMenuText.setScale(1)
-        });
-
-        // Clickable Controls Text
-        this.controlText = this.add.text(512, 550, 'Controls', {
-            fontFamily: '"Press Start 2P', fontSize: 30, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center',
-        }).setOrigin(0.5).setInteractive();
-        // Adding hover effect
-        this.controlText.on('pointerover', () => {
-            this.game.canvas.style.cursor = 'pointer';
-            this.controlText.setScale(1.1);
-        });
-        this.controlText.on('pointerout', () => {
-            this.game.canvas.style.cursor = 'pointer';
-            this.controlText.setScale(1);
+            this.playText.setScale(1)
         });
         
         // Clickable Mechanics Text
@@ -90,11 +74,11 @@ export class MainMenu extends Scene
     }
     update ()
     {
-        this.mainMenuText.once('pointerdown', () => {
-            this.scene.start('PlayGrounds');
+        this.playText.once('pointerdown', () => {
+            this.scene.start('GameControls');
         });
-        this.controlText.once('pointerdown', () => {
-            // Change scene to controllers
+        this.mechanicsText.once('pointerdown', () => {
+            // Change scene to game mechanics
         });
     }
 }

@@ -45,6 +45,10 @@ export class Preloader extends Scene
 
         // Audio
         this.load.audio('walkSfx', 'audio/walking_sfx.wav');
+
+        // Control keys image
+        this.load.image('arrowkeys', 'arrowkeys.png');
+        this.load.image('wasdkeys', 'wasdkeys.png');
     }
 
     create ()
@@ -104,7 +108,7 @@ export class Preloader extends Scene
 
         // Click redirects to MainMenu
         this.input.once('pointerdown', () => {
-            this.scene.start('PlayGrounds')
+            this.scene.start('GameControls')
         });
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
