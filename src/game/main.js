@@ -5,6 +5,7 @@ import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
 import { PlayGrounds } from './scenes/PlayGrounds';
+import { GameMechanics } from './scenes/GameMechanics';
 import { AUTO, Game } from 'phaser';
 
 // Find out more information about the Game Config at:
@@ -36,7 +37,8 @@ const config = {
         MainGame,
         GameOver,
         PlayGrounds,
-        GameControls
+        GameControls,
+        GameMechanics
     ]
 };
 

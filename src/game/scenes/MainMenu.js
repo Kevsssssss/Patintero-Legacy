@@ -78,7 +78,7 @@ export class MainMenu extends Scene
             this.scene.start('GameControls');
         });
         this.mechanicsText.once('pointerdown', () => {
-            // Change scene to game mechanics
+            this.scene.start('GameMechanics');
         });
     }
 }

@@ -49,6 +49,9 @@ export class Preloader extends Scene
         // Control keys image
         this.load.image('arrowkeys', 'arrowkeys.png');
         this.load.image('wasdkeys', 'wasdkeys.png');
+
+        // Instruction image
+        this.load.image('instructions', 'instructions.png');
     }
 
     create ()
@@ -108,7 +111,7 @@ export class Preloader extends Scene
 
         // Click redirects to MainMenu
         this.input.once('pointerdown', () => {
-            this.scene.start('GameControls')
+            this.scene.start('MainMenu')
         });
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
