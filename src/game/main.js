@@ -24,7 +24,9 @@ const config = {
         arcade: {
             gravity: { x: 0, y: 0 }
         },
-        debug: true
+        debug: true,
+        debugBodyColor: 0xff0000,
+        debugStaticBodyColor: 0xff0000
     },
     scene: [
         Boot,

@@ -35,7 +35,7 @@ export class Preloader extends Scene
         this.load.setPath('assets');
 
         this.load.image('logo', 'logo.png',);
-        
+
         // Sprite sheets
         this.load.spritesheet('player1', 'black-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
         this.load.spritesheet('player2', 'blue-man-sprite.png', { frameWidth: 70, frameHeight: 100});
@@ -84,7 +84,7 @@ export class Preloader extends Scene
         createPlayerAnims('player1');
         createPlayerAnims('player2');
         createPlayerAnims('bot');
-        
+
 
         // "Click to Continue Text" text
         const continueText = this.add.text(512, 600, 'Click to Continue', {
@@ -104,8 +104,8 @@ export class Preloader extends Scene
         this.input.once('pointerdown', () => {
             this.scene.start('PlayGrounds')
         });
-        
+
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        // this.scene.start('MainMenu'); 
+        // this.scene.start('MainMenu');
     }
 }
