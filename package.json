@@ -1,5 +1,5 @@
 {
-    "name": "template-webpack",
+    "name": "patintero-legacy",
     "version": "3.3.0",
     "main": "src/main.js",
     "scripts": {
@@ -18,7 +18,7 @@
     "bugs": {
         "url": "https://github.com/phaserjs/template-webpack/issues"
     },
-    "homepage": "https://github.com/phaserjs/template-webpack#readme",
+    "homepage": "https://https://github.com/Kevsssssss/Patintero-Legacy#readme",
     "devDependencies": {
         "@babel/core": "^7.26.10",
         "@babel/preset-env": "^7.26.9",
