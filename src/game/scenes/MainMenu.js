@@ -40,7 +40,7 @@ export class MainMenu extends Scene
         });
 
         // Clickable Play Text
-        this.mainMenuText = this.add.text(512, 600, 'Play', {
+        this.mainMenuText = this.add.text(512, 500, 'Play', {
             fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center',
@@ -57,7 +57,7 @@ export class MainMenu extends Scene
         });
 
         // Clickable Controls Text
-        this.controlText = this.add.text(512, 650, 'Controls', {
+        this.controlText = this.add.text(512, 550, 'Controls', {
             fontFamily: '"Press Start 2P', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center',
@@ -70,6 +70,22 @@ export class MainMenu extends Scene
         this.controlText.on('pointerout', () => {
             this.game.canvas.style.cursor = 'pointer';
             this.controlText.setScale(1);
+        });
+        
+        // Clickable Mechanics Text
+        this.mechanicsText = this.add.text(512, 600, 'Game Mechanics', {
+            fontFamily: '"Press Start 2P', fontSize: 30, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center',
+        }).setOrigin(0.5).setInteractive();
+        // Adding hover effect
+        this.mechanicsText.on('pointerover', () => {
+            this.game.canvas.style.cursor = 'pointer';
+            this.mechanicsText.setScale(1.1);
+        });
+        this.mechanicsText.on('pointerout', () => {
+            this.game.canvas.style.cursor = 'pointer';
+            this.mechanicsText.setScale(1);
         });
     }
     update ()

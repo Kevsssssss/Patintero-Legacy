@@ -6,14 +6,14 @@ export class PlayGrounds extends Scene {
     }
 
     create() {
-        this.physics.world.createDebugGraphic();
+        // this.physics.world.createDebugGraphic();
 
         // Back Button
         this.back = this.add.text(100, 50, 'Back', {
             fontFamily: '"Press Start 2P"', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 9,
             align: 'center'
-        }).setOrigin(0.5).setInteractive();
+        }).setOrigin(0.5).setInteractive().setDepth(1000);
         this.back.on('pointerover', () => {
             this.game.canvas.style.cursor = 'pointer';
             this.back.setScale(1.1);
@@ -32,34 +32,37 @@ export class PlayGrounds extends Scene {
             fontFamily: '"Press Start 2P"', fontSize: 35, color: '#ffffff',
             stroke: '#000000', strokeThickness: 9,
             align: 'left'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(1000);
 
         // Crossed status display at bottom right
         this.crossedText = this.add.text(900, 720, 'Crossed: None', {
             fontFamily: '"Press Start 2P"', fontSize: 15, color: '#ffffff',
             stroke: '#000000', strokeThickness: 7,
             align: 'right'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(1000);
 
         // Initialize scoring system
         this.score = 0;
         this.player1Crossed = false; // Track if player1 has crossed to safe zone
         this.player2Crossed = false; // Track if player2 has crossed to safe zone
 
+        // Add background image
+        this.add.image(512, 384, 'playGoundsBg').setOrigin(0.5, 0.5).setScale(4);
+
         this.cameras.main.setBackgroundColor(0x874e3b);
 
         // Patintero Lines (visible and invisible)
         this.lineGroup = this.physics.add.staticGroup();
 
-        this.topLine = this.add.rectangle((1024 / 2), ((768 / 2) / 2), 700, 5, 0xffffff, 1).setOrigin(0.5, 0.5);
-        this.midLine = this.add.rectangle((1024 / 2), (768 / 2), 700, 5, 0xffffff, 1).setOrigin(0.5, 0.5);
-        this.botLine = this.add.rectangle((1024 / 2), ((768 / 2) * 1.5), 700, 5, 0xffffff, 1).setOrigin(0.5, 0.5);
-        this.firstLine = this.add.rectangle(((1024 / 2) - 350), (768 / 2), 5, 385, 0xffffff, 1).setOrigin(0.5, 0.5);
-        this.secondLine = this.add.rectangle(((1024 / 2) - (350 / 3)), (768 / 2), 5, 385, 0xffffff, 1).setOrigin(0.5, 0.5);
-        this.thirdLine = this.add.rectangle(((1024 / 2) + (350 / 3)), (768 / 2), 5, 385, 0xffffff, 1).setOrigin(0.5, 0.5);
-        this.fourthLine = this.add.rectangle(((1024 / 2) + 350), (768 / 2), 5, 385, 0xffffff, 1).setOrigin(0.5, 0.5);
-        this.topLineExtended = this.add.rectangle((1024 / 2), ((768 / 2) / 2), 1024, 5, 0xff0000, 0.5).setOrigin(0.5, 0.5);
-        this.botLineExtended = this.add.rectangle((1024 / 2), ((768 / 2) * 1.5), 1024, 5, 0xff0000, 0.5).setOrigin(0.5, 0.5);
+        this.topLine = this.add.rectangle((1024 / 2), ((768 / 2) / 2), 700, 5, 0xffffff, 0).setOrigin(0.5, 0.5);
+        this.midLine = this.add.rectangle((1024 / 2), (768 / 2), 700, 5, 0xffffff, 0).setOrigin(0.5, 0.5);
+        this.botLine = this.add.rectangle((1024 / 2), ((768 / 2) * 1.5), 700, 5, 0xffffff, 0).setOrigin(0.5, 0.5);
+        this.firstLine = this.add.rectangle(((1024 / 2) - 350), (768 / 2), 5, 385, 0xffffff, 0).setOrigin(0.5, 0.5);
+        this.secondLine = this.add.rectangle(((1024 / 2) - (350 / 3)), (768 / 2), 5, 385, 0xffffff, 0).setOrigin(0.5, 0.5);
+        this.thirdLine = this.add.rectangle(((1024 / 2) + (350 / 3)), (768 / 2), 5, 385, 0xffffff, 0).setOrigin(0.5, 0.5);
+        this.fourthLine = this.add.rectangle(((1024 / 2) + 350), (768 / 2), 5, 385, 0xffffff, 0).setOrigin(0.5, 0.5);
+        this.topLineExtended = this.add.rectangle((1024 / 2), ((768 / 2) / 2), 1024, 5, 0xff0000, 0).setOrigin(0.5, 0.5);
+        this.botLineExtended = this.add.rectangle((1024 / 2), ((768 / 2) * 1.5), 1024, 5, 0xff0000, 0).setOrigin(0.5, 0.5);
 
         this.physics.add.existing(this.topLine, true);
         this.physics.add.existing(this.midLine, true);
