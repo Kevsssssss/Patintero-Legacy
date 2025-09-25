@@ -13,8 +13,8 @@ module.exports = {
     mode: "production",
     entry: "./src/main.js",
     output: {
-        path: path.resolve(process.cwd(), 'dist'),
-        filename: "./bundle.min.js"
+        filename: "./bundle.min.js",
+        path: path.resolve(__dirname, '../<YOUR_FOLDER_NAME>'), // <-- Check this line!
     },
     devtool: false,
     performance: {
