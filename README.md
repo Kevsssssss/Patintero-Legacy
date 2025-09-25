@@ -1,4 +1,4 @@
-# Patintero: The Passage Game
+# Patintero Legacy
 
 A digital implementation of the traditional Filipino street game, **Patintero** (also known as *Harangang-Taga* or *Tubig-Tubig*), built using the **Phaser 3** game framework.
 
@@ -32,8 +32,8 @@ You need to have **Node.js** installed on your system to run this project.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [YOUR_REPOSITORY_URL_HERE]
-    cd patintero-the-passage-game # Replace with your project folder name
+    git clone https://github.com/Kevsssssss/Patintero-Legacy.git
+    cd Patintero-Legacy
     ```
 
 2.  **Install Dependencies:**
