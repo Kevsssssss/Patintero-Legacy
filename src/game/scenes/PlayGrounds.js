@@ -27,6 +27,25 @@ export class PlayGrounds extends Scene {
             this.scene.start('MainMenu');
         });
 
+        // Score display at bottom left
+        this.scoreText = this.add.text(200, 720, 'Score: 0', {
+            fontFamily: '"Press Start 2P"', fontSize: 35, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 9,
+            align: 'left'
+        }).setOrigin(0.5);
+
+        // Crossed status display at bottom right
+        this.crossedText = this.add.text(900, 720, 'Crossed: None', {
+            fontFamily: '"Press Start 2P"', fontSize: 15, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 7,
+            align: 'right'
+        }).setOrigin(0.5);
+
+        // Initialize scoring system
+        this.score = 0;
+        this.player1Crossed = false; // Track if player1 has crossed to safe zone
+        this.player2Crossed = false; // Track if player2 has crossed to safe zone
+
         this.cameras.main.setBackgroundColor(0x874e3b);
 
         // Patintero Lines (visible and invisible)
@@ -301,6 +320,65 @@ export class PlayGrounds extends Scene {
         
         // Update bot3 physics body
         bot3.body.updateFromGameObject();
+
+        // Scoring system - Check player positions for crossing zones
+        this.checkCrossingZones();
+    }
+
+    checkCrossingZones() {
+        // Define zone boundaries based on the vertical lines
+        const firstLineX = ((1024 / 2) - 350); // firstLine position (scoring line)
+        const fourthLineX = ((1024 / 2) + 350); // fourthLine position (checkpoint line)
+        
+        // Check Player 1 crossing
+        if (this.player1.x > fourthLineX && !this.player1Crossed) {
+            // Player1 crossed fourthLine - set checkpoint
+            this.player1Crossed = true;
+            this.updateCrossedDisplay();
+            console.log('Player 1 crossed fourthLine! Checkpoint set.');
+        } else if (this.player1.x < firstLineX && this.player1Crossed) {
+            // Player1 crossed firstLine ONLY IF they have the checkpoint from fourthLine
+            this.score += 10;
+            this.player1Crossed = false; // Reset checkpoint for next round
+            this.updateScoreDisplay();
+            this.updateCrossedDisplay();
+            console.log('Player 1 crossed firstLine with checkpoint! +10 points (Total: ' + this.score + ')');
+        }
+        
+        // Check Player 2 crossing
+        if (this.player2.x > fourthLineX && !this.player2Crossed) {
+            // Player2 crossed fourthLine - set checkpoint
+            this.player2Crossed = true;
+            this.updateCrossedDisplay();
+            console.log('Player 2 crossed fourthLine! Checkpoint set.');
+        } else if (this.player2.x < firstLineX && this.player2Crossed) {
+            // Player2 crossed firstLine ONLY IF they have the checkpoint from fourthLine
+            this.score += 10;
+            this.player2Crossed = false; // Reset checkpoint for next round
+            this.updateScoreDisplay();
+            this.updateCrossedDisplay();
+            console.log('Player 2 crossed firstLine with checkpoint! +10 points (Total: ' + this.score + ')');
+        }
+    }
+
+    updateScoreDisplay() {
+        this.scoreText.setText('Score: ' + this.score);
+    }
+
+    updateCrossedDisplay() {
+        let crossedStatus = 'Crossed: ';
+        
+        if (this.player1Crossed && this.player2Crossed) {
+            crossedStatus += 'P1, P2';
+        } else if (this.player1Crossed) {
+            crossedStatus += 'P1';
+        } else if (this.player2Crossed) {
+            crossedStatus += 'P2';
+        } else {
+            crossedStatus += 'None';
+        }
+        
+        this.crossedText.setText(crossedStatus);
     }
 
     handleBotCollision(player, bot) {
@@ -309,13 +387,25 @@ export class PlayGrounds extends Scene {
         // Stop the player immediately
         player.setVelocity(0);
 
-        // Reset player position based on which player collided
+        // Cancel crossed status when player gets caught
         if (player === this.player1) {
             this.player1.x = this.player1StartX;
             this.player1.y = this.player1StartY;
+            // Cancel player1's checkpoint
+            if (this.player1Crossed) {
+                this.player1Crossed = false;
+                this.updateCrossedDisplay();
+                console.log('Player 1 caught! Checkpoint cancelled.');
+            }
         } else if (player === this.player2) {
             this.player2.x = this.player2StartX;
             this.player2.y = this.player2StartY;
+            // Cancel player2's checkpoint
+            if (this.player2Crossed) {
+                this.player2Crossed = false;
+                this.updateCrossedDisplay();
+                console.log('Player 2 caught! Checkpoint cancelled.');
+            }
         }
         
         // Optional: Add a brief pause or visual effect to make the collision more noticeable
