@@ -6,6 +6,23 @@ export class PlayGrounds extends Scene {
     }
 
     create() {
+        // ----------------------------------------------------
+        // NEW: Game State and Countdown Text Initialization
+        // ----------------------------------------------------
+        this.gameStarted = false; // Flag to control all game logic (movement, bots, collisions)
+
+        this.countdownText = this.add.text(1024 / 2, 768 / 2, '3', {
+            fontFamily: '"Press Start 2P"', 
+            fontSize: 100, 
+            color: '#ffffff',
+            stroke: '#000000', 
+            strokeThickness: 15,
+            align: 'center'
+        }).setOrigin(0.5).setDepth(2000).setVisible(true); // High depth to be on top
+
+        this.startCountdown();
+        // ----------------------------------------------------
+
         // this.physics.world.createDebugGraphic();
 
         // Back Button
@@ -143,8 +160,49 @@ export class PlayGrounds extends Scene {
         // Player 2 controls (⬆️⬇️⬅️➡️)
         this.cursors = this.input.keyboard.createCursorKeys();
     }
+    
+    // ----------------------------------------------------
+    // NEW: Countdown Logic Method
+    // ----------------------------------------------------
+    startCountdown() {
+        let count = 3;
+        
+        // Timer event to handle the countdown
+        this.countdownTimer = this.time.addEvent({
+            delay: 1000, // 1000 milliseconds = 1 second
+            callback: () => {
+                count--;
+
+                if (count > 0) {
+                    this.countdownText.setText(count.toString());
+                } else if (count === 0) {
+                    this.countdownText.setText('GO!');
+                } else {
+                    // Countdown is over, start the game
+                    this.gameStarted = true;
+                    this.countdownText.setVisible(false);
+                    this.countdownTimer.remove(); // Stop the timer
+                }
+            },
+            callbackScope: this,
+            loop: true
+        });
+    }
+    // ----------------------------------------------------
 
     update() {
+        // ----------------------------------------------------
+        // NEW: Check if the game has started before running logic
+        // ----------------------------------------------------
+        if (!this.gameStarted) {
+            this.player1.setVelocity(0);
+            this.player2.setVelocity(0);
+            // Ensure bots are also stationary during the countdown
+            this.allBots.forEach(bot => bot.anims.play('bot-turn'));
+            return; 
+        }
+        // ----------------------------------------------------
+
         const playerSpeed = 200;
         const botSpeed = 50;
 
@@ -285,10 +343,10 @@ export class PlayGrounds extends Scene {
 
         // Bot3 horizontal movement logic - tracks nearest player horizontally along midLine
         const bot3 = this.bot3;
-        const distanceToPlayer1 = Phaser.Math.Distance.Between(bot3.x, bot3.y, this.player1.x, this.player1.y);
-        const distanceToPlayer2 = Phaser.Math.Distance.Between(bot3.x, bot3.y, this.player2.x, this.player2.y);
-        const nearestPlayer = (distanceToPlayer1 < distanceToPlayer2) ? this.player1 : this.player2;
-        const targetX = nearestPlayer.x;
+        const distanceToPlayer1Bot3 = Phaser.Math.Distance.Between(bot3.x, bot3.y, this.player1.x, this.player1.y);
+        const distanceToPlayer2Bot3 = Phaser.Math.Distance.Between(bot3.x, bot3.y, this.player2.x, this.player2.y);
+        const nearestPlayerBot3 = (distanceToPlayer1Bot3 < distanceToPlayer2Bot3) ? this.player1 : this.player2;
+        const targetX = nearestPlayerBot3.x;
         const deltaX = targetX - bot3.x;
 
         // Define bot3 movement boundaries
@@ -385,6 +443,9 @@ export class PlayGrounds extends Scene {
     }
 
     handleBotCollision(player, bot) {
+        // Prevent collision logic from running before the game officially starts
+        if (!this.gameStarted) return; 
+
         console.log('Collision detected!', player.texture.key, 'hit', bot.texture.key);
         
         // Stop the player immediately
@@ -412,6 +473,5 @@ export class PlayGrounds extends Scene {
         }
         
         // Optional: Add a brief pause or visual effect to make the collision more noticeable
-        // You could add a screen flash, sound effect, or temporary invincibility here
     }
 }
