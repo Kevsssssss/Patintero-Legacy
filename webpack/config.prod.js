@@ -37,7 +37,14 @@ module.exports = {
             {
                 test: /\.(gif|png|jpe?g|svg|xml|glsl)$/i,
                 use: "file-loader"
-            }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader', // 2. Injects CSS into the DOM
+                    'css-loader'    // 1. Interprets @import and url() like require()
+                ]
+            },
         ]
     },
     optimization: {
