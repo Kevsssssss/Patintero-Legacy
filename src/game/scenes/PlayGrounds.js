@@ -566,19 +566,15 @@ export class PlayGrounds extends Scene {
 
         // Final Score
         const scoreDisplay = this.add.text(0, -50, `FINAL SCORE: ${totalScore}`, {
-            fontFamily: '"Press Start 2P"',
-            fontSize: '30px',
-            color: '#ffffff',
+            fontFamily: '"Press Start 2P"', fontSize: '30px', color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
         const createButton = (x, y, text) => {
             const button = this.add.text(x, y, text, {
-                fontFamily: '"Press Start 2P"',
-                fontSize: '25px',
-                color: '#00ff00',
-                stroke: '#000000', 
-                strokeThickness: 8,
+                fontFamily: '"Press Start 2P"', fontSize: '25px', color: '#00ff00',
+                stroke: '#000000', strokeThickness: 8,
                 align: 'center'
             }).setOrigin(0.5).setInteractive();
 
