@@ -11,19 +11,19 @@ export class Preloader extends Scene
 
     init ()
     {
-        //  We loaded this image in our Boot Scene, so we can display it here
+        //  We loaded this image in our Boot Scene, so we can display it here
         this.add.image(512, 384, 'background').setScale(1.5);
 
-        //  A simple progress bar. This is the outline of the bar.
+        //  A simple progress bar. This is the outline of the bar.
         this.add.rectangle(512, 384, 468, 32).setStrokeStyle(5, 0x000000);
 
-        //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
+        //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
         const bar = this.add.rectangle(512-230, 384, 4, 28, 0x00ff00);
 
-        //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
+        //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
         this.load.on('progress', (progress) => {
 
-            //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
+            //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
             bar.width = 4 + (460 * progress);
 
         });
@@ -31,12 +31,15 @@ export class Preloader extends Scene
 
     preload ()
     {
-        //  Load the assets for the game - Replace with your own assets
+        //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
 
         this.load.image('logo', 'logo.png');
 
         this.load.image('playGoundsBg', 'playgrounds.png');
+
+        // hearts
+        this.load.image('heart', 'heart.png');
 
         // Sprite sheets
         this.load.spritesheet('player1', 'black-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
@@ -45,6 +48,10 @@ export class Preloader extends Scene
 
         // Audio
         this.load.audio('walkSfx', 'audio/walking_sfx.wav');
+        this.load.audio('titleMusic', 'audio/Jimmy_Fontanez_-_Dub_Hub.mp3');
+        this.load.audio('gamePlayMusic', 'audio/Jeremy_Blake_-_Powerup.mp3');
+        this.load.audio('counter', 'audio/3-2-1-go.mp3');
+        this.load.audio('gameOver', 'audio/Game_Over_-_UNDERTALE.mp3');
 
         // Control keys image
         this.load.image('arrowkeys', 'arrowkeys.png');
@@ -56,8 +63,8 @@ export class Preloader extends Scene
 
     create ()
     {
-        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-        //  For example, you can define global animations here, so we can use them in other scenes.
+        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
+        //  For example, you can define global animations here, so we can use them in other scenes.
 
         const createPlayerAnims = (playerKey) => {
             const anims = [
@@ -114,7 +121,7 @@ export class Preloader extends Scene
             this.scene.start('MainMenu')
         });
 
-        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
+        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         // this.scene.start('MainMenu');
     }
 }

@@ -2,13 +2,27 @@ import { Scene } from 'phaser';
 
 export class MainMenu extends Scene
 {
+    music = null; 
+
     constructor ()
     {
         super('MainMenu');
     }
 
+    init() {
+        // Stop any currently playing audio from other scenes (like gameplay music)
+        this.sound.stopAll(); 
+    }
+
     create ()
     {
+        // MUSIC IMPLEMENTATION START
+        // Check if the music is already defined and playing to prevent multiple instances
+        if (!this.music || !this.music.isPlaying) {
+            this.music = this.sound.add('gamePlayMusic', { loop: true, volume: 0.5 }); // Adjust volume as needed
+            this.music.play();
+        }
+
         this.add.image(512, 384, 'background').setScale(1.5);
         // Game Title
         this.title = this.add.text(512, 280, 'PATINTERO', {
@@ -72,9 +86,12 @@ export class MainMenu extends Scene
             this.mechanicsText.setScale(1);
         });
     }
+
     update ()
     {
         this.playText.once('pointerdown', () => {
+            // OPTIONAL: Stop the music here if you want it to stop before the next scene starts
+            // this.music.stop(); 
             this.scene.start('GameControls');
         });
         this.mechanicsText.once('pointerdown', () => {

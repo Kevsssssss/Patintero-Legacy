@@ -1,16 +1,45 @@
 import { Scene } from "phaser";
 
 export class PlayGrounds extends Scene {
+    // Reference for the game music
+    gameMusic = null; 
+    // Reference for the game over music
+    gameOverMusic = null;
+
     constructor() {
         super('PlayGrounds');
+        
+        // References for UI elements and game objects
+        this.lifeText1 = null; 
+        this.lifeText2 = null; 
+        this.player1Hearts = [];
+        this.player2Hearts = [];
+        this.gameOverScreen = null;
     }
 
     create() {
-        // ----------------------------------------------------
-        // NEW: Game State and Countdown Text Initialization
-        // ----------------------------------------------------
-        this.gameStarted = false; // Flag to control all game logic (movement, bots, collisions)
+        // Stop any current music (like MainMenu music)
+        this.sound.stopAll();
 
+        // Start the gameplay music loop
+        if (!this.gameMusic || !this.gameMusic.isPlaying) {
+            this.gameMusic = this.sound.add('gamePlayMusic', { loop: true, volume: 0.4 }); // Adjust volume as needed
+            // The music will be played AFTER the countdown finishes
+        }
+
+        // --- CRITICAL: FULL GAME STATE RESET ---
+        // Ensures the game starts fresh every time the scene loads.
+        this.gameStarted = false; 
+        this.score = 0;
+        this.player1Crossed = false; 
+        this.player2Crossed = false; 
+        this.player1Lives = 5;
+        this.player2Lives = 5; 
+        this.gameOverScreen = null; 
+        this.player1Hearts = [];
+        this.player2Hearts = [];
+
+        // Game State and Countdown Text Initialization
         this.countdownText = this.add.text(1024 / 2, 768 / 2, '3', {
             fontFamily: '"Press Start 2P"', 
             fontSize: 100, 
@@ -18,12 +47,9 @@ export class PlayGrounds extends Scene {
             stroke: '#000000', 
             strokeThickness: 15,
             align: 'center'
-        }).setOrigin(0.5).setDepth(2000).setVisible(true); // High depth to be on top
+        }).setOrigin(0.5).setDepth(2000).setVisible(true);
 
-        this.startCountdown();
-        // ----------------------------------------------------
-
-        // this.physics.world.createDebugGraphic();
+        this.startCountdown(); // This will now play the audio
 
         // Back Button
         this.back = this.add.text(100, 50, 'Back', {
@@ -41,6 +67,14 @@ export class PlayGrounds extends Scene {
         });
         
         this.back.on('pointerdown', () => {
+            // Stop game music when returning to main menu
+            if (this.gameMusic) {
+                this.gameMusic.stop();
+            }
+            // Stop game over music if it's somehow playing
+            if (this.gameOverMusic) {
+                 this.gameOverMusic.stop();
+            }
             this.scene.start('MainMenu');
         });
 
@@ -57,12 +91,45 @@ export class PlayGrounds extends Scene {
             stroke: '#000000', strokeThickness: 7,
             align: 'right'
         }).setOrigin(0.5).setDepth(1000);
+        
+        // --- Player Text and Scaled Heart Life Display Setup ---
+        const textStartX = 20;
+        const heartStartX = 200; 
+        const heartY1 = 100;
+        const heartY2 = 140;
+        const heartScale = 4.0; 
+        const heartSpacing = 40;
 
-        // Initialize scoring system
-        this.score = 0;
-        this.player1Crossed = false; // Track if player1 has crossed to safe zone
-        this.player2Crossed = false; // Track if player2 has crossed to safe zone
+        // Player 1 Text
+        this.lifeText1 = this.add.text(textStartX, heartY1, 'Player 1:', {
+            fontFamily: '"Press Start 2P"', fontSize: 18, color: '#ffffffff',
+            stroke: '#000000', strokeThickness: 6,
+        }).setDepth(1000).setOrigin(0, 0.5); 
 
+        // Player 1 Hearts
+        for (let i = 0; i < this.player1Lives; i++) {
+            let heart = this.add.image(heartStartX + i * heartSpacing, heartY1, 'heart')
+                .setOrigin(0, 0.5)
+                .setScale(heartScale)
+                .setDepth(1000);
+            this.player1Hearts.push(heart);
+        }
+
+        // Player 2 Text
+        this.lifeText2 = this.add.text(textStartX, heartY2, 'Player 2:', {
+            fontFamily: '"Press Start 2P"', fontSize: 18, color: '#00ffff',
+            stroke: '#000000', strokeThickness: 6,
+        }).setDepth(1000).setOrigin(0, 0.5);
+
+        // Player 2 Hearts
+        for (let i = 0; i < this.player2Lives; i++) {
+            let heart = this.add.image(heartStartX + i * heartSpacing, heartY2, 'heart')
+                .setOrigin(0, 0.5)
+                .setScale(heartScale)
+                .setDepth(1000);
+            this.player2Hearts.push(heart);
+        }
+        
         // Add background image
         this.add.image(512, 384, 'playGoundsBg').setOrigin(0.5, 0.5).setScale(4);
 
@@ -107,37 +174,31 @@ export class PlayGrounds extends Scene {
         this.player2StartX = (1024 / 2) - 470;
         this.player2StartY = (768 / 2) + 25;
 
-        // Bot Sprites - Create moving bots as dynamic sprites, now including bot3
-        // Important: Do NOT set collideWorldBounds for bots so they can move freely
+        // Bot Sprites
         this.bot1 = this.physics.add.sprite(((1024 / 2) - (350 - 5)), (768 / 2) - 70, 'bot').setScale(1.5).setImmovable(true);
         this.bot2 = this.physics.add.sprite(((1024 / 2) - (350 / 3) - 5), (768 / 2) - 70, 'bot').setScale(1.5).setImmovable(true);
         this.bot3 = this.physics.add.sprite((1024 / 2), (768 / 2) - 70, 'bot').setScale(1.5).setImmovable(true);
         this.bot4 = this.physics.add.sprite(((1024 / 2) + (350 / 3)), (768 / 2) - 70, 'bot').setScale(1.5).setImmovable(true);
         this.bot5 = this.physics.add.sprite(((1024 / 2) + 350), (768 / 2) - 70, 'bot').setScale(1.5).setImmovable(true);
 
-        // Create a group for all bots (mixing dynamic and static)
         this.allBots = [this.bot1, this.bot2, this.bot3, this.bot4, this.bot5];
 
-        // Play the 'turn' animation for each bot to show the first frame
         this.allBots.forEach(bot => {
             bot.anims.play('bot-turn');
         });
 
-        // Resize and offset hitboxes for players
+        // Resize and offset hitboxes
         this.player1.body.setSize(35, 20).setOffset(10, 80);
         this.player2.body.setSize(35, 20).setOffset(10, 80);
-
-        // Resize and offset hitboxes for all bots
         this.allBots.forEach(bot => {
             bot.body.setSize(35, 20).setOffset(10, 80);
         });
 
-        // Colliders - Only players collide with boundary lines, bots can move freely
+        // Colliders (Player/Line Collisions)
         this.physics.add.collider(this.player1, this.lineGroup);
         this.physics.add.collider(this.player2, this.lineGroup);
         
-        // Individual colliders for each bot to ensure collision detection works properly
-        // Note: Bots do NOT collide with lineGroup so they can move to the very edges
+        // Colliders (Player/Bot Collisions)
         this.physics.add.collider(this.player1, this.bot1, this.handleBotCollision, null, this);
         this.physics.add.collider(this.player1, this.bot2, this.handleBotCollision, null, this);
         this.physics.add.collider(this.player1, this.bot3, this.handleBotCollision, null, this);
@@ -161,15 +222,14 @@ export class PlayGrounds extends Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
     
-    // ----------------------------------------------------
-    // NEW: Countdown Logic Method
-    // ----------------------------------------------------
     startCountdown() {
         let count = 3;
         
-        // Timer event to handle the countdown
+        // Play the counter audio once
+        this.sound.play('counter', { volume: 0.7 });
+
         this.countdownTimer = this.time.addEvent({
-            delay: 1000, // 1000 milliseconds = 1 second
+            delay: 1000, 
             callback: () => {
                 count--;
 
@@ -177,44 +237,40 @@ export class PlayGrounds extends Scene {
                     this.countdownText.setText(count.toString());
                 } else if (count === 0) {
                     this.countdownText.setText('GO!');
+                    // Start the gameplay music
+                    if (this.gameMusic) {
+                        this.gameMusic.play();
+                    }
                 } else {
-                    // Countdown is over, start the game
                     this.gameStarted = true;
                     this.countdownText.setVisible(false);
-                    this.countdownTimer.remove(); // Stop the timer
+                    this.countdownTimer.remove();
                 }
             },
             callbackScope: this,
             loop: true
         });
     }
-    // ----------------------------------------------------
 
     update() {
-        // ----------------------------------------------------
-        // NEW: Check if the game has started before running logic
-        // ----------------------------------------------------
+        // --- Game State Check ---
         if (!this.gameStarted) {
             this.player1.setVelocity(0);
             this.player2.setVelocity(0);
-            // Ensure bots are also stationary during the countdown
+            // Bots should retain their 'turn' state until game start
             this.allBots.forEach(bot => bot.anims.play('bot-turn'));
             return; 
         }
-        // ----------------------------------------------------
 
         const playerSpeed = 200;
         const botSpeed = 50;
 
-        // --------------------
-        // Player 1 Movement (WASD) - Diagonal Movement Enabled with Specific Animation Logic
-        // --------------------
+        // Player 1 Movement (WASD) 
         this.player1.setVelocity(0);
-        
         let velX1 = 0;
         let velY1 = 0;
         let isMoving1 = false;
-        let currentAnim1 = 'player1-turn'; // Default animation if no movement
+        let currentAnim1 = 'player1-turn'; 
 
         if (this.wasd.up.isDown) {
             velY1 = -playerSpeed;
@@ -228,23 +284,20 @@ export class PlayGrounds extends Scene {
 
         if (this.wasd.left.isDown) {
             velX1 = -playerSpeed;
-            // If already moving up/down, keep vertical animation. Otherwise, use left.
             if (!isMoving1) { 
                 currentAnim1 = 'player1-left';
             }
             isMoving1 = true;
         } else if (this.wasd.right.isDown) {
             velX1 = playerSpeed;
-            // If already moving up/down, keep vertical animation. Otherwise, use right.
             if (!isMoving1) {
                 currentAnim1 = 'player1-right';
             }
             isMoving1 = true;
         }
 
-        // Diagonal Speed Normalization (prevents faster diagonal movement)
         if (velX1 !== 0 && velY1 !== 0) {
-            const diagonalFactor = 0.7071; // 1 / Math.sqrt(2)
+            const diagonalFactor = 0.7071; 
             velX1 *= diagonalFactor;
             velY1 *= diagonalFactor;
         }
@@ -252,15 +305,12 @@ export class PlayGrounds extends Scene {
         this.player1.setVelocity(velX1, velY1);
         this.player1.anims.play(currentAnim1, true);
 
-        // --------------------
-        // Player 2 Movement (Cursors) - Diagonal Movement Enabled with Specific Animation Logic
-        // --------------------
+        // Player 2 Movement (Cursors)
         this.player2.setVelocity(0);
-
         let velX2 = 0;
         let velY2 = 0;
         let isMoving2 = false;
-        let currentAnim2 = 'player2-turn'; // Default animation if no movement
+        let currentAnim2 = 'player2-turn'; 
 
         if (this.cursors.up.isDown) {
             velY2 = -playerSpeed;
@@ -274,23 +324,20 @@ export class PlayGrounds extends Scene {
 
         if (this.cursors.left.isDown) {
             velX2 = -playerSpeed;
-            // If already moving up/down, keep vertical animation. Otherwise, use left.
             if (!isMoving2) {
                 currentAnim2 = 'player2-left';
             }
             isMoving2 = true;
         } else if (this.cursors.right.isDown) {
             velX2 = playerSpeed;
-            // If already moving up/down, keep vertical animation. Otherwise, use right.
             if (!isMoving2) {
                 currentAnim2 = 'player2-right';
             }
             isMoving2 = true;
         }
         
-        // Diagonal Speed Normalization (prevents faster diagonal movement)
         if (velX2 !== 0 && velY2 !== 0) {
-            const diagonalFactor = 0.7071; // 1 / Math.sqrt(2)
+            const diagonalFactor = 0.7071;
             velX2 *= diagonalFactor;
             velY2 *= diagonalFactor;
         }
@@ -301,13 +348,13 @@ export class PlayGrounds extends Scene {
         // Set player depths
         this.player1.setDepth(this.player1.y);
         this.player2.setDepth(this.player2.y);
-
-        // Set bot depths
+        
+        // Set bot depths dynamically based on Y position (essential for 2.5D visual overlap)
         this.allBots.forEach(bot => {
             bot.setDepth(bot.y);
         });
 
-        // Bot movement logic for bots 1, 2, 4, and 5 (vertical tracking behavior)
+        // Bot movement logic for vertical tracking bots
         const verticalTrackingBots = [this.bot1, this.bot2, this.bot4, this.bot5];
         
         verticalTrackingBots.forEach(bot => {
@@ -330,18 +377,16 @@ export class PlayGrounds extends Scene {
                 bot.anims.play('bot-turn', true);
             }
 
-            // Much more generous movement boundaries - allow bots to go well beyond the lines
             const topLineY = ((768 / 2) / 2); // 192
             const botLineY = ((768 / 2) * 1.5); // 576
-            const minY = topLineY - 50; // Allow 50 pixels above top line
-            const maxY = botLineY + 50; // Allow 50 pixels below bottom line
+            const minY = topLineY - 50; 
+            const maxY = botLineY + 50; 
             bot.y = Phaser.Math.Clamp(bot.y, minY, maxY);
             
-            // Update the physics body to match the new sprite position
             bot.body.updateFromGameObject();
         });
 
-        // Bot3 horizontal movement logic - tracks nearest player horizontally along midLine
+        // Bot3 horizontal movement logic
         const bot3 = this.bot3;
         const distanceToPlayer1Bot3 = Phaser.Math.Distance.Between(bot3.x, bot3.y, this.player1.x, this.player1.y);
         const distanceToPlayer2Bot3 = Phaser.Math.Distance.Between(bot3.x, bot3.y, this.player2.x, this.player2.y);
@@ -349,16 +394,13 @@ export class PlayGrounds extends Scene {
         const targetX = nearestPlayerBot3.x;
         const deltaX = targetX - bot3.x;
 
-        // Define bot3 movement boundaries
         const leftBoundary = ((1024 / 2) - 350) + 15;
         const rightBoundary = ((1024 / 2) + 350) - 15;
 
-        // Only move if there's significant distance to target
         if (Math.abs(deltaX) > 5) {
             const directionX = (deltaX > 0) ? 1 : -1;
             const newX = bot3.x + (directionX * botSpeed * this.game.loop.delta / 1000);
             
-            // Check if the new position would be within boundaries
             if (newX >= leftBoundary && newX <= rightBoundary) {
                 bot3.x = newX;
                 
@@ -368,18 +410,13 @@ export class PlayGrounds extends Scene {
                     bot3.anims.play('bot-left', true);
                 }
             } else {
-                // At boundary but still want to track - show idle animation
                 bot3.anims.play('bot-turn', true);
             }
         } else {
-            // Close to target - show idle animation
             bot3.anims.play('bot-turn', true);
         }
 
-        // Ensure bot3 stays within boundaries (safety clamp)
         bot3.x = Phaser.Math.Clamp(bot3.x, leftBoundary, rightBoundary);
-        
-        // Update bot3 physics body
         bot3.body.updateFromGameObject();
 
         // Scoring system - Check player positions for crossing zones
@@ -387,38 +424,29 @@ export class PlayGrounds extends Scene {
     }
 
     checkCrossingZones() {
-        // Define zone boundaries based on the vertical lines
-        const firstLineX = ((1024 / 2) - 350); // firstLine position (scoring line)
-        const fourthLineX = ((1024 / 2) + 350); // fourthLine position (checkpoint line)
+        const firstLineX = ((1024 / 2) - 350); 
+        const fourthLineX = ((1024 / 2) + 350); 
         
         // Check Player 1 crossing
         if (this.player1.x > fourthLineX && !this.player1Crossed) {
-            // Player1 crossed fourthLine - set checkpoint
             this.player1Crossed = true;
             this.updateCrossedDisplay();
-            console.log('Player 1 crossed fourthLine! Checkpoint set.');
         } else if (this.player1.x < firstLineX && this.player1Crossed) {
-            // Player1 crossed firstLine ONLY IF they have the checkpoint from fourthLine
             this.score += 10;
-            this.player1Crossed = false; // Reset checkpoint for next round
+            this.player1Crossed = false; 
             this.updateScoreDisplay();
             this.updateCrossedDisplay();
-            console.log('Player 1 crossed firstLine with checkpoint! +10 points (Total: ' + this.score + ')');
         }
         
         // Check Player 2 crossing
         if (this.player2.x > fourthLineX && !this.player2Crossed) {
-            // Player2 crossed fourthLine - set checkpoint
             this.player2Crossed = true;
             this.updateCrossedDisplay();
-            console.log('Player 2 crossed fourthLine! Checkpoint set.');
         } else if (this.player2.x < firstLineX && this.player2Crossed) {
-            // Player2 crossed firstLine ONLY IF they have the checkpoint from fourthLine
             this.score += 10;
-            this.player2Crossed = false; // Reset checkpoint for next round
+            this.player2Crossed = false; 
             this.updateScoreDisplay();
             this.updateCrossedDisplay();
-            console.log('Player 2 crossed firstLine with checkpoint! +10 points (Total: ' + this.score + ')');
         }
     }
 
@@ -443,35 +471,148 @@ export class PlayGrounds extends Scene {
     }
 
     handleBotCollision(player, bot) {
-        // Prevent collision logic from running before the game officially starts
         if (!this.gameStarted) return; 
 
-        console.log('Collision detected!', player.texture.key, 'hit', bot.texture.key);
-        
-        // Stop the player immediately
         player.setVelocity(0);
 
-        // Cancel crossed status when player gets caught
         if (player === this.player1) {
+            // Decrease Life
+            this.player1Lives -= 1;
+            
+            // Hide the last visible heart
+            if (this.player1Lives >= 0 && this.player1Hearts[this.player1Lives]) {
+                this.player1Hearts[this.player1Lives].setVisible(false);
+            }
+
+            // Reset position and checkpoint
             this.player1.x = this.player1StartX;
             this.player1.y = this.player1StartY;
-            // Cancel player1's checkpoint
             if (this.player1Crossed) {
                 this.player1Crossed = false;
                 this.updateCrossedDisplay();
-                console.log('Player 1 caught! Checkpoint cancelled.');
+            }
+            
+            // Check for Game Over
+            if (this.player1Lives <= 0) {
+                this.handleGameOver();
             }
         } else if (player === this.player2) {
+            // Decrease Life
+            this.player2Lives -= 1;
+            
+            // Hide the last visible heart
+            if (this.player2Lives >= 0 && this.player2Hearts[this.player2Lives]) {
+                this.player2Hearts[this.player2Lives].setVisible(false);
+            }
+
+            // Reset position and checkpoint
             this.player2.x = this.player2StartX;
             this.player2.y = this.player2StartY;
-            // Cancel player2's checkpoint
             if (this.player2Crossed) {
                 this.player2Crossed = false;
                 this.updateCrossedDisplay();
-                console.log('Player 2 caught! Checkpoint cancelled.');
+            }
+
+            // Check for Game Over
+            if (this.player2Lives <= 0) {
+                this.handleGameOver();
             }
         }
+    }
+
+    // --- UPDATED Game Over Function with Retry and Main Menu Buttons ---
+    handleGameOver() {
+        if (!this.gameStarted || this.gameOverScreen) return; 
         
-        // Optional: Add a brief pause or visual effect to make the collision more noticeable
+        this.gameStarted = false; 
+        this.physics.pause(); 
+        
+        // Stop all animations
+        this.allBots.forEach(bot => bot.anims.stop()); 
+        this.player1.anims.stop();
+        this.player2.anims.stop();
+        this.player1.setFrame(0); 
+        this.player2.setFrame(0);
+        this.allBots.forEach(bot => bot.setFrame(0));
+
+        // Stop the looping gameplay music
+        if (this.gameMusic) {
+            this.gameMusic.stop();
+        }
+
+        // Play the game over music once
+        if (!this.gameOverMusic) {
+            this.gameOverMusic = this.sound.add('gameOver', { loop: false, volume: 0.6 });
+        }
+        this.gameOverMusic.play();
+
+
+        const totalScore = this.score;
+        const screenWidth = 1024;
+        const screenHeight = 768;
+
+        this.gameOverScreen = this.add.container(screenWidth / 2, screenHeight / 2).setDepth(3000);
+        
+        // Full-screen Background Overlay
+        const rect = this.add.rectangle(0, 0, screenWidth, screenHeight, 0x000000, 0.9).setOrigin(0.5);
+        
+        // Game Over Title
+        const titleText = this.add.text(0, -150, 'GAME OVER!', {
+            fontFamily: '"Press Start 2P"',
+            fontSize: '50px',
+            color: '#ff0000',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        // Final Score
+        const scoreDisplay = this.add.text(0, -50, `FINAL SCORE: ${totalScore}`, {
+            fontFamily: '"Press Start 2P"',
+            fontSize: '30px',
+            color: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        const createButton = (x, y, text) => {
+            const button = this.add.text(x, y, text, {
+                fontFamily: '"Press Start 2P"',
+                fontSize: '25px',
+                color: '#00ff00',
+                stroke: '#000000', 
+                strokeThickness: 8,
+                align: 'center'
+            }).setOrigin(0.5).setInteractive();
+
+            // Hover effects
+            button.on('pointerover', () => {
+                this.game.canvas.style.cursor = 'pointer';
+                button.setScale(1.1);
+            });
+            button.on('pointerout', () => {
+                this.game.canvas.style.cursor = 'default';
+                button.setScale(1);
+            });
+
+            return button;
+        };
+        
+        // Retry Button
+        const retryButton = createButton(0, 100, 'RETRY');
+        retryButton.on('pointerup', () => {
+            if (this.gameOverMusic) {
+                this.gameOverMusic.stop();
+            }
+            this.scene.start('PlayGrounds'); 
+        });
+
+        // Main Menu Button
+        const mainMenuButton = createButton(0, 200, 'MAIN MENU');
+        mainMenuButton.on('pointerup', () => {
+            if (this.gameOverMusic) {
+                this.gameOverMusic.stop();
+            }
+            this.scene.start('MainMenu'); 
+        });
+
+        this.gameOverScreen.add([rect, titleText, scoreDisplay, retryButton, mainMenuButton]);
     }
 }
