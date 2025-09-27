@@ -41,7 +41,7 @@ You need to have **Node.js** installed on your system to run this project.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/Kevsssssss/Patintero-Legacy.git](https://github.com/Kevsssssss/Patintero-Legacy.git)
+    git clone https://github.com/Kevsssssss/Patintero-Legacy.git
     cd Patintero-Legacy
     ```
 
