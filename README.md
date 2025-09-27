@@ -2,12 +2,21 @@
 
 A digital implementation of the traditional Filipino street game, **Patintero** (also known as *Harangang-Taga* or *Tubig-Tubig*), built using the **Phaser 3** game framework.
 
+## 🔗 Play the Game
+
+The game is deployed and accessible online:
+
+**Deployed Link:** [https://kevsssssss.github.io/Patintero-Legacy/](https://kevsssssss.github.io/Patintero-Legacy/)
+
+---
+
 ## 🎯 Game Objective
 
 The goal is for the two players (the runners) to successfully cross the entire playing court (from the starting line to the end line) and cross back to the starting line without being tagged by any of the Bots (the "It" team).
 
 * **Scoring:** 10 points are awarded each time a player completes the round-trip journey (crosses to the end and returns to the start).
-* **Being Tagged:** If a player is tagged by a Bot, they are immediately sent back to their starting position, and their current "crossed" status (checkpoint) is cancelled.
+* **Being Tagged:** If a player is tagged by a Bot, they are immediately sent back to their starting position, and their current "crossed" status (checkpoint) is cancelled. Each player starts with 5 lives.
+* **Game Over:** The game ends if either Player 1 or Player 2 runs out of lives.
 
 ---
 
@@ -32,7 +41,7 @@ You need to have **Node.js** installed on your system to run this project.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/Kevsssssss/Patintero-Legacy.git
+    git clone [https://github.com/Kevsssssss/Patintero-Legacy.git](https://github.com/Kevsssssss/Patintero-Legacy.git)
     cd Patintero-Legacy
     ```
 
@@ -69,3 +78,13 @@ The main logic is contained within the `PlayGrounds.js` scene.
     * **Vertical Bots:** Bots on the inner vertical lines track the nearest player and move up and down along their assigned lane.
     * **Horizontal Bot:** The center bot (`this.bot3`) tracks the nearest player horizontally along the midline.
 * **Scoring System:** Uses checkpoint logic (`playerXCrossed`) to ensure a player must reach the far right line before they can score by returning to the far left.
+
+### 🛑 Game Over State (New Updates)
+
+The Game Over state includes crucial changes to ensure a clean transition and provide immediate gameplay options:
+
+* **Animation Freeze:** Upon game over, all player and bot animations are immediately stopped, and their sprites are set to their static idle frame (frame 0).
+* **Audio Transition:** The ambient `gamePlayMusic` stops, and a dedicated `gameOver` audio track plays.
+* **Game Over Menu:** The screen displays the Final Score and presents two options with interactive hover effects:
+    * **RETRY:** Restarts the current `PlayGrounds` scene, beginning a new game.
+    * **MAIN MENU:** Transitions back to the `MainMenu` scene.
