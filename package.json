@@ -2,6 +2,7 @@
     "name": "patintero-legacy",
     "version": "1.0.0",
     "homepage": "https://https://github.com/Kevsssssss/Patintero-Legacy/",
+    "description": "A digital implementation of the traditional Filipino street game, Patintero (also known as Harangang-Taga or Tubig-Tubig), built using the Phaser 3 game framework.",
     "main": "src/main.js",
     "scripts": {
         "dev": "node log.js dev & webpack-dev-server --config webpack/config.js --open",
