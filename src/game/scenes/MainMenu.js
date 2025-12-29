@@ -23,7 +23,7 @@ export class MainMenu extends Scene
             this.music.play();
         }
 
-        this.add.image(512, 384, 'background').setScale(1.5);
+        this.add.image(512, 384, 'background').setScale(5);
         // Game Title
         this.title = this.add.text(512, 280, 'PATINTERO', {
             fontFamily: '"Press Start 2P"', fontSize: 100, color: '#f3a51d',

@@ -97,7 +97,7 @@ export class PlayGrounds extends Scene {
         const heartStartX = 200; 
         const heartY1 = 100;
         const heartY2 = 140;
-        const heartScale = 4.0; 
+        const heartScale = 1.0; 
         const heartSpacing = 40;
 
         // Player 1 Text

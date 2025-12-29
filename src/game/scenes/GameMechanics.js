@@ -7,7 +7,7 @@ export class GameMechanics extends Scene {
         super('GameMechanics');
     }
     create() {
-        this.add.image(512, 384, 'background').setScale(1.5);
+        this.add.image(512, 384, 'background').setScale(5);
 
         // Back Button
         this.back = this.add.text(100, 50, 'Back', {

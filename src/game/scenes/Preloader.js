@@ -12,7 +12,7 @@ export class Preloader extends Scene
     init ()
     {
         //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(512, 384, 'background').setScale(1.5);
+        this.add.image(512, 384, 'background').setScale(5);
 
         //  A simple progress bar. This is the outline of the bar.
         this.add.rectangle(512, 384, 468, 32).setStrokeStyle(5, 0x000000);
@@ -42,8 +42,8 @@ export class Preloader extends Scene
         this.load.image('heart', 'heart.png');
 
         // Sprite sheets
-        this.load.spritesheet('player1', 'black-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
-        this.load.spritesheet('player2', 'blue-man-sprite.png', { frameWidth: 70, frameHeight: 100});
+        this.load.spritesheet('player1', 'player1_sprite.png', { frameWidth: 70, frameHeight: 100 });
+        this.load.spritesheet('player2', 'player2_sprite.png', { frameWidth: 70, frameHeight: 100});
         this.load.spritesheet('bot', 'red-man-sprite.png', { frameWidth: 70, frameHeight: 100 });
 
         // Audio

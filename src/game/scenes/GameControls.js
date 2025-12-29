@@ -8,7 +8,7 @@ export class GameControls extends Scene {
     }
 
     create() {
-        this.add.image(512, 384, 'background').setScale(1.5);
+        this.add.image(512, 384, 'background').setScale(5);
 
         this.controlsInstruction = this.add.text(1024 / 2, (768 / 2) - 300, 'Controls', {
             fontFamily: '"Press Start 2P"', fontSize: 40, color: '#ffffff',
