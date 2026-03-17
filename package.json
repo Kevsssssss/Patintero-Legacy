@@ -5,6 +5,7 @@
     "description": "A digital implementation of the traditional Filipino street game, Patintero (also known as Harangang-Taga or Tubig-Tubig), built using the Phaser 3 game framework.",
     "main": "src/main.js",
     "scripts": {
+        "start" : "npm run dev-nolog",
         "dev": "node log.js dev & webpack-dev-server --config webpack/config.js --open",
         "build": "node log.js build & webpack --config webpack/config.prod.js",
         "deploy": "gh-pages -d docs",
